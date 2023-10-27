@@ -14,9 +14,9 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - os: ubuntu-latest
-            build_type: "Release"
-            build_gen: "Unix Makefiles"
+          #- os: ubuntu-latest
+          #  build_type: "Release"
+          #  build_gen: "Unix Makefiles"
           - os: windows-latest
             build_type: "Release"
             build_gen: "NMake Makefiles"
@@ -44,7 +44,7 @@ jobs:
     - name: Upload
       uses: actions/upload-artifact@v3
       with:
-        name: ${{matrix.config.artifact}}
+        name: "Windows executable"
         path: ${{github.workspace}}/build/uephem.exe
       if: matrix.os == 'windows-latest'
 
