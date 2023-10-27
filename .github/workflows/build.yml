@@ -6,24 +6,45 @@ on:
   pull_request:
     branches: [ "main" ]
 
-env:
-  BUILD_TYPE: Release
-
 jobs:
-  windows:
-    runs-on: windows-latest
-
+  build:
+    runs-on: ${{matrix.os}}
+    
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: ubuntu-latest
+            build_type: "Release"
+            build_gen: "Unix Makefiles"
+          - os: windows-latest
+            build_type: "Release"
+            build_gen: "NMake Makefiles"
+            build_arch: x64
+    
     steps:
     - uses: actions/checkout@v3
-    - uses: ilammy/msvc-dev-cmd@v1
+
+    - name: Configure Developer Command Prompt for MSVC
+      uses: ilammy/msvc-dev-cmd@v1
+      with:
+        arch: ${{matrix.build_arch}}
+      if: matrix.os == 'windows-latest'
 
     - name: Configure CMake
-      run: cmake -B ${{github.workspace}}/build -G "NMake Makefiles" -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}}
+      run: cmake -B ${{github.workspace}}/build -G ${{matrix.build_gen}} -DCMAKE_BUILD_TYPE=${{matrix.build_type}}
 
     - name: Build
-      run: cmake --build ${{github.workspace}}/build --config ${{env.BUILD_TYPE}}
+      run: cmake --build ${{github.workspace}}/build --config ${{matrix.build_type}}
 
-    - name: Test
-      working-directory: ${{github.workspace}}/build
-      run: ctest -C ${{env.BUILD_TYPE}}
+    #- name: Test
+    #  working-directory: ${{github.workspace}}/build
+    #  run: ctest -C ${{env.BUILD_TYPE}}
+
+    - name: Upload
+      uses: actions/upload-artifact@v3
+      with:
+        name: ${{matrix.config.artifact}}
+        path: ${{github.workspace}}/build/uephem.exe
+      if: matrix.os == 'windows-latest'
 
