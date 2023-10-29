@@ -32,7 +32,7 @@ A JPL Planetary and Lunar Ephemerides binary ephemeris file is required. For an 
 | 13 | Lunar mantle angular velocity | omega_x,omega_y,omega_z | rad/d   | Moon   |
 | 14 | TT-TDB                        | t                       | s       | Earth  |
 
-Note that items 11-14 may not be present in some ephemeris files.
+> Note: Items 11-14 may not be present in some ephemeris files.
 
 ## File Format
 
