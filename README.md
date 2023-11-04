@@ -85,8 +85,8 @@ The first record in a file contains the header, the structure of which is descri
 	} de_header;
 
 > Note: Some ephemeris files store additional constant names in the header between `table2` and `table3` if the limit of 400 constant names has been reached.
-
-The second record is simply an array of `double` values for the constants named in the header. Each of the remaining records contain two `double` values: the Julian date start and end times of the record, followed by an array of `double` Chebyshev polynomial coefficients for each item in the ephemeris.
+> 
+> The second record is simply an array of `double` values for the constants named in the header. Each of the remaining records contain two `double` values: the Julian date start and end times of the record, followed by an array of `double` Chebyshev polynomial coefficients for each item in the ephemeris.
 
 ## License
 
