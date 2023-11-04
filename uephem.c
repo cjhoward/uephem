@@ -108,7 +108,8 @@ int main(int argc, char* argv[])
 	
 	// Open ephemeris file
 	FILE* file;
-	if (fopen_s(&file, argv[1], "rb") != 0)
+	file = fopen(argv[1], "rb");
+	if (!file)
 		error(err_fopen);
 	
 	// Parse item ID
