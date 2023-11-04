@@ -4,13 +4,17 @@
 
 μephem is a tiny ephemeris utility capable of generating orbital state vectors for the major bodies in our solar system. The μephem source is a single C-file with a few hundred lines of code, making it easily ported to other languages or modified to run on embedded systems.
 
-## Prerequisites
-
-A JPL Planetary and Lunar Ephemerides binary ephemeris file is required. For an overview of the available ephemerides, see <https://ssd.jpl.nasa.gov/planets/eph_export.html>. Little-endian ephemeris files can be downloaded from <ftp://ssd.jpl.nasa.gov/pub/eph/planets/Linux>. Big-endian ephemeris files can be downloaded from <ftp://ssd.jpl.nasa.gov/pub/eph/planets/SunOS>. μephem is capable of reading both little and big-endian files, regardless of the host endianness. `.bsp` ephemeris files are **not** supported.
-
 ## Usage
 
-	uephem <file> <item ID> <t0> [<t1> <resolution>]
+	uephem <file> <item> <t0> [<t1> <resolution>]
+
+`file` must be a JPL Planetary and Lunar Ephemerides binary ephemeris file. For an overview of the available ephemerides, see <https://ssd.jpl.nasa.gov/planets/eph_export.html>. Little-endian ephemeris files can be downloaded from <ftp://ssd.jpl.nasa.gov/pub/eph/planets/Linux>. Big-endian ephemeris files can be downloaded from <ftp://ssd.jpl.nasa.gov/pub/eph/planets/SunOS>. μephem is capable of reading both little and big-endian files, regardless of the host endianness. `.bsp` ephemeris files are **not** supported.
+
+`item` is the ID number of an ephemeris item to evaluate. See [the table below](#items) for more details.
+
+`t0` and `t1` are the start and end Julian dates. e.g. `2451545.0` corresponds to the J2000.0 epoch.
+
+`resolution` is the number of time points to evaluate between `t0` and `t1`.
 
 ### Items
 
@@ -34,7 +38,16 @@ A JPL Planetary and Lunar Ephemerides binary ephemeris file is required. For an 
 
 > Note: Items 11-14 may not be present in some ephemeris files.
 
-## File Format
+## Configuration & Building
+
+CMake is required to configure and build the application.
+
+Run the following commands to configure and build a release executable:
+
+	cmake -B build -DCMAKE_BUILD_TYPE=Release
+	cmake --build build
+
+## Ephemeris File Format
 
 JPL ephemeris binary files consist of a series fixed-size records. Record size can vary between ephemeris files. A file's record size can be inferred through its file size along with the time information given in its header.
 
@@ -74,18 +87,9 @@ The first record in a file contains the header, the structure of which is descri
 		
 	} de_header;
 
-Note that some ephemeris files store additional constant names in the header between `table2` and `table3` if the limit of 400 constant names has been reached.
+> Note: Some ephemeris files store additional constant names in the header between `table2` and `table3` if the limit of 400 constant names has been reached.
 
 The second record is simply an array of `double` values for the constants named in the header. Each of the remaining records contain two `double` values: the Julian date start and end times of the record, followed by an array of `double` Chebyshev polynomial coefficients for each item in the ephemeris.
-
-## Configuration & Building
-
-CMake is required to configure and build the application.
-
-Run the following commands to configure and build a release executable:
-
-	cmake -B build -DCMAKE_BUILD_TYPE=Release
-	cmake --build build
 
 ## License
 
