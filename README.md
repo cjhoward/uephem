@@ -14,23 +14,23 @@ A JPL Planetary and Lunar Ephemerides binary ephemeris file is required. For an 
 
 ### Items
 
-| ID | Name                          | Output                  | Units   | Center |
-|---:|:------------------------------|:------------------------|:--------|:------:|
-|  0 | Mercury                       | x,y,z,vx,vy,vz          | km,km/d | SSB    |
-|  1 | Venus                         | x,y,z,vx,vy,vz          | km,km/d | SSB    |
-|  2 | Earth-Moon barycenter         | x,y,z,vx,vy,vz          | km,km/d | SSB    |
-|  3 | Mars                          | x,y,z,vx,vy,vz          | km,km/d | SSB    |
-|  4 | Jupiter                       | x,y,z,vx,vy,vz          | km,km/d | SSB    |
-|  5 | Saturn                        | x,y,z,vx,vy,vz          | km,km/d | SSB    |
-|  6 | Uranus                        | x,y,z,vx,vy,vz          | km,km/d | SSB    |
-|  7 | Neptune                       | x,y,z,vx,vy,vz          | km,km/d | SSB    |
-|  8 | Pluto                         | x,y,z,vx,vy,vz          | km,km/d | SSB    |
-|  9 | Moon                          | x,y,z,vx,vy,vz          | km,km/d | Earth  |
-| 10 | Sun                           | x,y,z,vx,vy,vz          | km,km/d | SSB    |
-| 11 | Earth nutation                | d(psi),d(epsilon)       | rad     | Earth  |
-| 12 | Lunar mantle libration        | phi,theta,psi           | rad     | Moon   |
-| 13 | Lunar mantle angular velocity | omega_x,omega_y,omega_z | rad/d   | Moon   |
-| 14 | TT-TDB                        | t                       | s       | Earth  |
+| ID | Name                          | Output                                | Units     | Center |
+|---:|:------------------------------|:--------------------------------------|:----------|:------:|
+|  0 | Mercury                       | x,y,z,vx,vy,vz                        | km,km/d   | SSB    |
+|  1 | Venus                         | x,y,z,vx,vy,vz                        | km,km/d   | SSB    |
+|  2 | Earth-Moon barycenter         | x,y,z,vx,vy,vz                        | km,km/d   | SSB    |
+|  3 | Mars                          | x,y,z,vx,vy,vz                        | km,km/d   | SSB    |
+|  4 | Jupiter                       | x,y,z,vx,vy,vz                        | km,km/d   | SSB    |
+|  5 | Saturn                        | x,y,z,vx,vy,vz                        | km,km/d   | SSB    |
+|  6 | Uranus                        | x,y,z,vx,vy,vz                        | km,km/d   | SSB    |
+|  7 | Neptune                       | x,y,z,vx,vy,vz                        | km,km/d   | SSB    |
+|  8 | Pluto                         | x,y,z,vx,vy,vz                        | km,km/d   | SSB    |
+|  9 | Moon                          | x,y,z,vx,vy,vz                        | km,km/d   | Earth  |
+| 10 | Sun                           | x,y,z,vx,vy,vz                        | km,km/d   | SSB    |
+| 11 | Earth nutation                | d(psi),d(epsilon),vd(psi),vd(epislon) | rad,rad/d | Earth  |
+| 12 | Lunar mantle libration        | phi,theta,psi,vphi,vtheta,vpsi        | rad,rad/d | Moon   |
+| 13 | Lunar mantle angular velocity | omega_x,omega_y,omega_z               | rad/d     | Moon   |
+| 14 | TT-TDB                        | t                                     | s         | Earth  |
 
 > Note: Items 11-14 may not be present in some ephemeris files.
 
@@ -77,6 +77,15 @@ The first record in a file contains the header, the structure of which is descri
 Note that some ephemeris files store additional constant names in the header between `table2` and `table3` if the limit of 400 constant names has been reached.
 
 The second record is simply an array of `double` values for the constants named in the header. Each of the remaining records contain two `double` values: the Julian date start and end times of the record, followed by an array of `double` Chebyshev polynomial coefficients for each item in the ephemeris.
+
+## Configuration & Building
+
+CMake is required to configure and build the application.
+
+Run the following commands to configure and build a release executable:
+
+	cmake -B build -DCMAKE_BUILD_TYPE=Release
+	cmake --build build
 
 ## License
 

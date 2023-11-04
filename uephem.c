@@ -25,6 +25,7 @@
 #include <stdlib.h>
 #include <float.h>
 #include <limits.h>
+#include <math.h>
 
 #define DE_OFFSET_TIME 0xA5C
 #define DE_OFFSET_TABLE1 0xA88
@@ -93,6 +94,23 @@ double chebyshev(const double* a, int n, double x)
 	{
 		n0 = x * n1 - n2;
 		y += *(a++) * n0;
+	}
+	
+	return y;
+}
+
+/// Evaluates the derivative of a Chebyshev polynomial.
+double chebyshev_derivative(const double* a, int n, double x)
+{
+	double y = 0.0;
+	double n2 = 0.0, n1 = 1.0, n0;
+	
+	for (int i = 1; i < n; ++i)
+	{
+		y += *(a + i) * i * n1;
+		n0 = 2.0 * x * n1 - n2;
+		n2 = n1;
+		n1 = n0;
 	}
 	
 	return y;
@@ -263,18 +281,32 @@ int main(int argc, char* argv[])
 		double t = (jd - subinterval_start) / subinterval_duration * 2.0 - 1.0;
 		
 		// Pointer to the first coefficient of the first property
-		const double* coeffs = rec_buf + (table[item_id][0] - 1) + subinterval_index * item_ncoeff * item_ncomp;
+		const double* coeffs_start = rec_buf + (table[item_id][0] - 1) + subinterval_index * item_ncoeff * item_ncomp;
 		
 		// Print Julian date
 		printf("%.*f", DBL_DECIMAL_DIG, jd);
 		
 		// For each component in the item
+		const double* coeffs = coeffs_start;
 		for (int j = 0; j < item_ncomp; ++j, coeffs += item_ncoeff)
 		{
 			// Evaluate the Chebyshev polynomial and output the result
 			double x = chebyshev(coeffs, item_ncoeff, t);
 			printf(",%.*e", DBL_DECIMAL_DIG, x);
 		}
+		
+		if (item_id < 13)
+		{
+			// For each component in the item
+			coeffs = coeffs_start;
+			for (int j = 0; j < item_ncomp; ++j, coeffs += item_ncoeff)
+			{
+				// Evaluate the derivative of the Chebyshev polynomial w.r.t. time and output the result
+				double dx = chebyshev_derivative(coeffs, item_ncoeff, t) / subinterval_duration * 2.0;
+				printf(",%.*e", DBL_DECIMAL_DIG, dx);
+			}
+		}
+		
 		printf("\n");
 	}
 	
