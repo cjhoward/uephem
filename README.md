@@ -8,13 +8,10 @@
 
 	uephem <file> <item> <t0> [<t1> <resolution>]
 
-`file` must be a JPL Planetary and Lunar Ephemerides binary ephemeris file. For an overview of the available ephemerides, see <https://ssd.jpl.nasa.gov/planets/eph_export.html>. Little-endian ephemeris files can be downloaded from <ftp://ssd.jpl.nasa.gov/pub/eph/planets/Linux>. Big-endian ephemeris files can be downloaded from <ftp://ssd.jpl.nasa.gov/pub/eph/planets/SunOS>. μephem is capable of reading both little and big-endian files, regardless of the host endianness. `.bsp` ephemeris files are **not** supported.
-
-`item` is the ID number of an ephemeris item to evaluate. See [the table below](#items) for more details.
-
-`t0` and `t1` are the start and end Julian dates. e.g. `2451545.0` corresponds to the J2000.0 epoch.
-
-`resolution` is the number of time points to evaluate between `t0` and `t1`.
+* `file` must be a JPL Planetary and Lunar Ephemerides binary ephemeris file. For an overview of the available ephemerides, see <https://ssd.jpl.nasa.gov/planets/eph_export.html>. Little-endian ephemeris files can be downloaded from <ftp://ssd.jpl.nasa.gov/pub/eph/planets/Linux>. Big-endian ephemeris files can be downloaded from <ftp://ssd.jpl.nasa.gov/pub/eph/planets/SunOS>. μephem is capable of reading both little and big-endian files, regardless of the host endianness. `.bsp` ephemeris files are **not** supported.
+* `item` is the ID number of an ephemeris item to evaluate. See [the table below](#items) for more details.
+* `t0` and `t1` are the start and end Julian dates. e.g. `2451545.0` corresponds to the J2000.0 epoch.
+* `resolution` is the number of time points to evaluate between `t0` and `t1`.
 
 ### Items
 
