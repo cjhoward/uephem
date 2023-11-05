@@ -82,33 +82,33 @@ size_t fread_swap(void* ptr, size_t size, size_t count, FILE* stream)
 }
 
 /// Evaluates a Chebyshev polynomial.
-double chebyshev(const double* a, int n, double x)
+double chebyshev(const double* coeffs, int n, double t)
 {
-	double y = *(a++);
-	y += *(a++) * x;
+	double n2 = 1.0, n1 = t, n0;
+	double y = t * coeffs[1] + coeffs[0];
+	t *= 2.0;
 	
-	double n2 = 1.0, n1 = x, n0;
-	x *= 2.0;
-	
-	for (n -= 2; n; --n, n2 = n1, n1 = n0)
+	for (int i = 2; i <= n; ++i)
 	{
-		n0 = x * n1 - n2;
-		y += *(a++) * n0;
+		n0 = t * n1 - n2;
+		y += coeffs[i] * n0;
+		n2 = n1;
+		n1 = n0;
 	}
-	
+
 	return y;
 }
 
 /// Evaluates the derivative of a Chebyshev polynomial.
-double chebyshev_derivative(const double* a, int n, double x)
+double chebyshev_derivative(const double* coeffs, int n, double t)
 {
 	double y = 0.0;
 	double n2 = 0.0, n1 = 1.0, n0;
 	
-	for (int i = 1; i < n; ++i)
+	for (int i = 1; i <= n; ++i)
 	{
-		y += *(a + i) * i * n1;
-		n0 = 2.0 * x * n1 - n2;
+		y += coeffs[i] * i * n1;
+		n0 = 2.0 * t * n1 - n2;
 		n2 = n1;
 		n1 = n0;
 	}
@@ -291,7 +291,7 @@ int main(int argc, char* argv[])
 		for (int j = 0; j < item_ncomp; ++j, coeffs += item_ncoeff)
 		{
 			// Evaluate the Chebyshev polynomial and output the result
-			double x = chebyshev(coeffs, item_ncoeff, t);
+			double x = chebyshev(coeffs, item_ncoeff - 1, t);
 			printf(",%.*e", DBL_DECIMAL_DIG, x);
 		}
 		
@@ -302,7 +302,7 @@ int main(int argc, char* argv[])
 			for (int j = 0; j < item_ncomp; ++j, coeffs += item_ncoeff)
 			{
 				// Evaluate the derivative of the Chebyshev polynomial w.r.t. time and output the result
-				double dx = chebyshev_derivative(coeffs, item_ncoeff, t) / subinterval_duration * 2.0;
+				double dx = chebyshev_derivative(coeffs, item_ncoeff - 1, t) / subinterval_duration * 2.0;
 				printf(",%.*e", DBL_DECIMAL_DIG, dx);
 			}
 		}
