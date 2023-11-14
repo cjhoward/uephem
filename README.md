@@ -4,7 +4,7 @@
 
 ## Overview
 
-μephem is a tiny ephemeris utility capable of generating orbital state vectors for the major bodies in our solar system. The μephem source is a single C-file with a few hundred lines of code, making it easily ported to other languages or modified to run on embedded systems.
+μephem is a tiny ephemeris utility that generates orbital state vectors for the major bodies in our solar system. The μephem source is a single C-file with a few hundred lines of code, making it easily ported to other languages or made to run on embedded systems.
 
 ## Usage
 
